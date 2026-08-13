@@ -1,0 +1,32 @@
+{
+  "_comment": "No Reddit OAuth keys needed — uses public JSON API. Only set groq_api_key and reddit_user_agent.",
+  "groq_api_key": "Your_API_GROQCLOUD",
+  "reddit_user_agent": "lumina-backend/1.0 (college major project, u/Temporary-Laugh-2660)",
+  "model_heavy": "llama-3.3-70b-versatile",
+  "model_light": "llama-3.1-8b-instant",
+  "token_limit_light": 1024,
+  "token_limit_heavy": 4096,
+  "posts_per_product": 70,
+  "max_competitors": 3,
+  "rate_limit_sleep_seconds": 3,
+  "reddit_sleep_seconds": 2,
+  "score_out_of": 10,
+  "community_clusters": [
+    "Tech",
+    "Students",
+    "Gamers",
+    "Professionals",
+    "Casual Users",
+    "Parents",
+    "Creators",
+    "Enthusiasts"
+  ],
+  "design_colors": {
+    "primary": "#4a40e0",
+    "positive": "#00675e",
+    "negative": "#b90035",
+    "neutral": "#595c5e",
+    "accent": "#6b63f5",
+    "surface": "rgba(255,255,255,0.05)"
+  }
+}
