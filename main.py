@@ -1,6 +1,6 @@
-
 import io
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -24,6 +24,26 @@ _SETTINGS_FILE = Path(__file__).parent / "settings.json"
 def _load_settings() -> dict:
     with open(_SETTINGS_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
+
+
+def _get_groq_api_key(settings: dict) -> str:
+    """
+    Resolve the Groq API key. Prefers the GROQ_API_KEY environment variable
+    (set this in your deployment platform, e.g. Render's Environment tab) so
+    the real key never has to be committed to settings.json / git.
+    Falls back to settings.json for local/dev convenience.
+    """
+    env_key = os.environ.get("GROQ_API_KEY")
+    if env_key:
+        return env_key
+
+    file_key = settings.get("groq_api_key")
+    if not file_key or file_key == "Your_API_GROQCLOUD":
+        raise RuntimeError(
+            "No Groq API key found. Set the GROQ_API_KEY environment variable "
+            "(recommended) or put a real key in settings.json['groq_api_key']."
+        )
+    return file_key
 
 
 
@@ -136,7 +156,7 @@ def run_pipeline(product_name: str) -> None:
     global _pipeline_status
 
     settings = _load_settings()
-    groq_client = Groq(api_key=settings["groq_api_key"])
+    groq_client = Groq(api_key=_get_groq_api_key(settings))
 
     try:
         import workflow_script as ws
@@ -712,7 +732,7 @@ async def keywords():
 
     try:
         settings = _load_settings()
-        client   = Groq(api_key=settings["groq_api_key"])
+        client   = Groq(api_key=_get_groq_api_key(settings))
         res = client.chat.completions.create(
             model    = settings.get("model_light", "llama-3.1-8b-instant"),
             messages = [{"role": "user", "content": llm_prompt}],
