@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply bg-background text-on-background font-body antialiased;
+  }
+  ::selection {
+    @apply bg-primary-container text-on-primary-container;
+  }
+  :focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-primary;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-surface-container-lowest/80 backdrop-blur-sm border border-outline-variant/50 shadow-glass rounded-2xl;
+  }
+}
