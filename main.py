@@ -73,15 +73,26 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
+_allowed_origins = [
+    "http://localhost:5173",   # Vite dev server (default)
+    "http://localhost:3000",   # Alternative React dev port
+    "http://localhost:4173",   # Vite preview
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:3000",
+]
+
+# Add your deployed frontend's URL via an env var on Render, e.g.
+# FRONTEND_URL=https://lumina-frontend.onrender.com
+# Supports a comma-separated list if you have more than one.
+_frontend_url = os.environ.get("FRONTEND_URL", "")
+if _frontend_url:
+    _allowed_origins.extend(
+        origin.strip() for origin in _frontend_url.split(",") if origin.strip()
+    )
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",   # Vite dev server (default)
-        "http://localhost:3000",   # Alternative React dev port
-        "http://localhost:4173",   # Vite preview
-        "http://127.0.0.1:5173",
-        "http://127.0.0.1:3000",
-    ],
+    allow_origins=_allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
